@@ -1,0 +1,954 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  padding: 20px;
+  position: relative;
+  overflow: visible;
+}
+
+/* 초콜릿 바 스타일 */
+.chocolate-bar {
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  animation: chocolate-appear 0.5s ease-out;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes chocolate-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chocolate-bar:hover {
+  transform: scale(1.02);
+}
+
+.chocolate-bar.broken {
+  pointer-events: none;
+}
+
+/* 초콜릿 가운데에서 나오는 황금빛 */
+.chocolate-golden-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    rgba(244, 208, 63, 0.9) 0%,
+    rgba(244, 208, 63, 0.7) 15%,
+    rgba(244, 208, 63, 0.5) 30%,
+    rgba(244, 208, 63, 0.3) 50%,
+    rgba(244, 208, 63, 0.1) 70%,
+    transparent 100%
+  );
+  z-index: 5;
+  animation: golden-glow-emerge 1.5s ease-out 0.3s forwards;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+@keyframes golden-glow-emerge {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    filter: blur(5px);
+  }
+  15% {
+    width: 30px;
+    height: 30px;
+    opacity: 0.2;
+    filter: blur(8px);
+  }
+  30% {
+    width: 80px;
+    height: 80px;
+    opacity: 0.4;
+    filter: blur(12px);
+  }
+  50% {
+    width: 150px;
+    height: 150px;
+    opacity: 0.6;
+    filter: blur(18px);
+  }
+  70% {
+    width: 300px;
+    height: 300px;
+    opacity: 0.7;
+    filter: blur(25px);
+  }
+  85% {
+    width: 450px;
+    height: 450px;
+    opacity: 0.6;
+    filter: blur(35px);
+  }
+  100% {
+    width: 600px;
+    height: 600px;
+    opacity: 0.5;
+    filter: blur(40px);
+  }
+}
+
+.chocolate-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  background: transparent;
+  padding: 2px;
+  border-radius: 3px;
+  transition: opacity 0.6s ease-out;
+}
+
+.chocolate-bar.broken .chocolate-grid {
+  opacity: 0;
+}
+
+.chocolate-piece {
+  background: #5D4037;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.08),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+    0 1px 1px rgba(0, 0, 0, 0.3);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* 대각선 줄무늬 패턴 */
+  background-image: repeating-linear-gradient(
+    45deg,
+    #5D4037 0px,
+    #5D4037 2px,
+    #6D4C41 2px,
+    #6D4C41 4px
+  );
+}
+
+.chocolate-piece::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  border-radius: 2px;
+}
+
+.chocolate-piece.broken {
+  animation: break-piece 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes break-piece {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(
+      calc(var(--break-x, 0) * 200px),
+      calc(var(--break-y, 0) * 200px)
+    ) rotate(var(--break-rotate, 0deg)) scale(0.1);
+    opacity: 0;
+  }
+}
+
+
+/* 가나 초콜릿 엠블럼 (왼쪽 상단 삼각형) */
+
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: #2C1810;
+  border-radius: 10px 10px 0 0;
+  transform-origin: top;
+  transform: rotateX(0deg);
+  transition: transform 0.6s ease;
+  box-shadow: 
+    0 -5px 15px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 0, 0, 0.4),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 3;
+  border-top: 4px solid #d4af37;
+}
+
+.chocolate-envelope.opening .envelope-flap {
+  transform: rotateX(-180deg);
+}
+
+.envelope-flap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 20px,
+      rgba(139, 69, 19, 0.1) 20px,
+      rgba(139, 69, 19, 0.1) 40px
+    );
+  border-radius: 10px 10px 0 0;
+}
+
+.click-hint {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-align: center;
+  animation: hint-pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+
+.chocolate-envelope.opening .click-hint {
+  opacity: 0;
+}
+
+@keyframes hint-pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.golden-ticket {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  max-width: 850px;
+  height: auto;
+  aspect-ratio: 4.2 / 1;
+  /* min-height: 200px; */
+  background: linear-gradient(135deg, #c9a961 0%, #d4af37 20%, #f4d03f 50%, #d4af37 80%, #c9a961 100%);
+  padding: clamp(25px, 4vw, 40px) clamp(35px, 6vw, 60px) clamp(20px, 3vw, 30px);
+  box-shadow: 
+    0 0 60px rgba(212, 175, 55, 0.4),
+    0 0 120px rgba(212, 175, 55, 0.25),
+    0 0 180px rgba(184, 148, 31, 0.15),
+    0 15px 50px rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.15),
+    inset 0 0 50px rgba(255, 255, 255, 0.1),
+    inset 0 0 100px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  border: 4px solid #a0821a;
+  border-radius: 8px;
+  z-index: 10;
+  transform: translate(-50%, -50%) scale(0.3);
+  filter: blur(15px);
+  /* 프리미엄 골드 텍스처 - 세련된 대각선 줄무늬와 광택 효과 */
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(201, 169, 97, 0.4) 0px,
+      rgba(201, 169, 97, 0.4) 15px,
+      rgba(212, 175, 55, 0.5) 15px,
+      rgba(212, 175, 55, 0.5) 30px
+    ),
+    radial-gradient(
+      ellipse 80% 60% at 20% 20%,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 80% 60% at 80% 80%,
+      rgba(0, 0, 0, 0.12) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      transparent 35%,
+      transparent 65%,
+      rgba(0, 0, 0, 0.08) 100%
+    );
+}
+
+/* 초콜릿 포장지 위에서 나오는 금색 빛 */
+.chocolate-golden-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    rgba(244, 208, 63, 0.9) 0%,
+    rgba(244, 208, 63, 0.7) 15%,
+    rgba(244, 208, 63, 0.5) 30%,
+    rgba(244, 208, 63, 0.3) 50%,
+    rgba(244, 208, 63, 0.1) 70%,
+    transparent 100%
+  );
+  z-index: 15;
+  animation: chocolate-glow-emerge 1.2s ease-out, chocolate-glow-fade 0.8s ease-out 1.9s forwards;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(30px);
+}
+
+@keyframes chocolate-glow-emerge {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    filter: blur(5px);
+  }
+  30% {
+    width: 100px;
+    height: 100px;
+    opacity: 0.6;
+    filter: blur(15px);
+  }
+  60% {
+    width: 300px;
+    height: 300px;
+    opacity: 0.8;
+    filter: blur(25px);
+  }
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0.7;
+    filter: blur(30px);
+  }
+}
+
+@keyframes chocolate-glow-fade {
+  0% {
+    opacity: 0.7;
+    width: 500px;
+    height: 500px;
+  }
+  100% {
+    opacity: 0;
+    width: 600px;
+    height: 600px;
+    filter: blur(40px);
+  }
+}
+
+.chocolate-envelope.opened .chocolate-golden-glow {
+  animation: chocolate-glow-appear-moved 1.5s ease-out;
+}
+
+@keyframes chocolate-glow-appear {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0) scale(0.2);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50px) scale(1.5);
+  }
+  60% {
+    opacity: 0.9;
+    transform: translateX(-50%) translateY(-100px) scale(1.8);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) translateY(-150px) scale(2);
+  }
+}
+
+@keyframes chocolate-glow-appear-moved {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0) scale(0.2);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50px) scale(1.5);
+  }
+  60% {
+    opacity: 0.9;
+    transform: translateX(-50%) translateY(-100px) scale(1.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-150px) scale(2);
+  }
+}
+
+
+/* 톱니 모양 가장자리 (좌우만) */
+.ticket-perforation {
+  position: absolute;
+  background: #000;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ticket-perforation.left {
+  left: -8px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background-image: repeating-radial-gradient(
+    circle at center 10px,
+    transparent 0px,
+    transparent 6px,
+    #000 6px,
+    #000 8px,
+    transparent 8px
+  );
+  background-size: 100% 20px;
+  background-repeat: repeat-y;
+}
+
+.ticket-perforation.right {
+  right: -8px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background-image: repeating-radial-gradient(
+    circle at center 10px,
+    transparent 0px,
+    transparent 6px,
+    #000 6px,
+    #000 8px,
+    transparent 8px
+  );
+  background-size: 100% 20px;
+  background-repeat: repeat-y;
+}
+
+.golden-ticket.visible {
+  animation: ticket-emerge-smooth 1.2s ease-out 0.8s forwards;
+}
+
+@keyframes ticket-emerge-smooth {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    filter: blur(15px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(0.85);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+}
+
+.ticket-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 0 25px rgba(184, 148, 31, 0.6),
+    inset 0 0 50px rgba(212, 175, 55, 0.3);
+  /* 톱니 모양 가장자리 */
+  background-image: 
+    /* 상단 톱니 */
+    repeating-linear-gradient(
+      to right,
+      transparent 0px,
+      transparent 18px,
+      #b8941f 18px,
+      #b8941f 22px
+    ),
+    /* 하단 톱니 */
+    repeating-linear-gradient(
+      to right,
+      transparent 0px,
+      transparent 18px,
+      #b8941f 18px,
+      #b8941f 22px
+    ),
+    /* 좌측 톱니 */
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 18px,
+      #b8941f 18px,
+      #b8941f 22px
+    ),
+    /* 우측 톱니 */
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 18px,
+      #b8941f 18px,
+      #b8941f 22px
+    );
+  background-size: 
+    100% 3px,  /* 상단 */
+    100% 3px,  /* 하단 */
+    3px 100%,  /* 좌측 */
+    3px 100%;  /* 우측 */
+  background-position: 
+    top,       /* 상단 */
+    bottom,    /* 하단 */
+    left,      /* 좌측 */
+    right;     /* 우측 */
+  background-repeat: no-repeat;
+}
+
+.ticket-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212, 175, 55, 0.25) 0%,
+    rgba(212, 175, 55, 0.15) 25%,
+    rgba(244, 208, 63, 0.1) 40%,
+    rgba(184, 148, 31, 0.08) 60%,
+    transparent 85%
+  );
+  animation: glow-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.8;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.sparkle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #fff, 0 0 12px #ffd700;
+  animation: sparkle-animation 2s ease-in-out infinite;
+}
+
+@keyframes sparkle-animation {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+.ticket-top-decoration,
+.ticket-bottom-decoration {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.ornament {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.ornament.left::before,
+.ornament.right::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #b8941f;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(184, 148, 31, 0.6);
+}
+
+.ornament.left::after,
+.ornament.right::after {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #b8941f;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.ticket-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.ticket-header {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(15px, 3vw, 25px);
+  margin-bottom: clamp(15px, 2.5vw, 20px);
+  position: relative;
+  padding-top: 0;
+}
+
+.ticket-stamp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(55px, 9vw, 75px);
+  height: clamp(55px, 9vw, 75px);
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 50%, #b8941f 100%);
+  border-radius: 50%;
+  border: clamp(3px, 0.4vw, 4px) solid #8b6914;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(212, 175, 55, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(6px, 1.2vw, 10px);
+  z-index: 2;
+}
+
+.stamp-date {
+  font-size: clamp(0.5rem, 1.2vw, 0.7rem);
+  font-weight: 700;
+  color: #000;
+  line-height: 1;
+}
+
+.stamp-month {
+  font-size: clamp(0.45rem, 1vw, 0.6rem);
+  font-weight: 600;
+  color: #000;
+  line-height: 1;
+  margin: clamp(1px, 0.3vw, 2px) 0;
+}
+
+.stamp-day {
+  font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+  font-weight: 900;
+  color: #000;
+  line-height: 1;
+}
+
+.ticket-brand {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 clamp(12px, 2.5vw, 18px) 0;
+  letter-spacing: clamp(2px, 0.5vw, 3px);
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  text-align: left;
+  position: relative;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(0, 0, 0, 0.3);
+  padding-left: clamp(90px, 14vw, 110px);
+}
+
+.ticket-title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 clamp(15px, 2.5vw, 20px) 0;
+  letter-spacing: clamp(3px, 0.8vw, 6px);
+  font-family: 'Playfair Display', 'Cinzel', 'Times New Roman', serif;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-align: center;
+  text-shadow: 
+    3px 3px 6px rgba(0, 0, 0, 0.7),
+    0 0 15px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(212, 175, 55, 0.3);
+  font-style: italic;
+  position: relative;
+}
+
+.ticket-address {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: clamp(15px, 2.5vw, 20px);
+  text-align: right;
+}
+
+.address-label {
+  font-size: clamp(0.55rem, 1.3vw, 0.7rem);
+  font-weight: 700;
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: clamp(1.5px, 0.4vw, 2px);
+  margin-bottom: clamp(3px, 0.6vw, 5px);
+  text-shadow: 
+    1px 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.address-value {
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.4;
+  text-shadow: 
+    1px 1px 2px rgba(255, 255, 255, 0.3),
+    0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.ticket-divider {
+  width: 100%;
+  height: clamp(2px, 0.4vw, 3px);
+  margin: clamp(20px, 3vw, 30px) 0 clamp(40px, 6vw, 60px) 0;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #f4d03f 10%,
+    #f4d03f 90%,
+    transparent 100%
+  );
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #f4d03f;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px rgba(244, 208, 63, 0.8),
+    inset 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.ticket-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 0;
+  padding-top: 0;
+  gap: clamp(15px, 3vw, 25px);
+  margin-bottom: clamp(15px, 2.5vw, 20px);
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  flex: 1;
+  text-align: center;
+}
+
+.footer-label {
+  font-size: clamp(0.55rem, 1.3vw, 0.7rem);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: clamp(1.5px, 0.4vw, 2px);
+  margin-bottom: clamp(5px, 1vw, 8px);
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.6),
+    0 0 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding-bottom: clamp(3px, 0.6vw, 5px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.footer-value {
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.4;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.6),
+    0 0 8px rgba(0, 0, 0, 0.3);
+  margin-top: clamp(2px, 0.5vw, 4px);
+}
+
+.ticket-bottom-text {
+  text-align: center;
+  font-size: clamp(0.55rem, 1.3vw, 0.7rem);
+  color: #fff;
+  margin-top: clamp(20px, 3.5vw, 30px);
+  padding-top: clamp(12px, 2.5vw, 18px);
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+  letter-spacing: clamp(1px, 0.3vw, 2px);
+  text-transform: uppercase;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.6),
+    0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.ticket-bottom-text::before,
+.ticket-bottom-text::after {
+  content: '✦';
+  position: absolute;
+  top: clamp(12px, 2.5vw, 18px);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: clamp(0.4rem, 1vw, 0.5rem);
+}
+
+.ticket-bottom-text::before {
+  left: 15%;
+}
+
+.ticket-bottom-text::after {
+  right: 15%;
+}
+
+/* 애니메이션 */
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 1s ease-out 0.3s both;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 1s ease-out 0.6s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .chocolate-bar {
+    max-width: 90%;
+  }
+
+  .chocolate-grid {
+    max-width: 100%;
+  }
+
+  .golden-ticket {
+    aspect-ratio: 2.5 / 1;
+    padding: 25px 30px;
+  }
+
+  .ticket-title {
+    font-size: 1.6rem;
+    white-space: normal;
+  }
+
+  .ticket-brand {
+    font-size: 1.1rem;
+  }
+
+  .ticket-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ticket-header-content {
+    text-align: center;
+  }
+
+  .footer-value {
+    font-size: 0.65rem;
+  }
+  
+  .footer-label {
+    font-size: 0.6rem;
+  }
+
+  .ticket-bottom-text {
+    font-size: 0.55rem;
+  }
+}
