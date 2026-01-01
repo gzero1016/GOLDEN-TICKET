@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './App.css';
-import 하랑Image from './하랑.png';
 
 function App() {
   const [isOpened, setIsOpened] = useState(false);
@@ -149,7 +148,7 @@ function App() {
 
         {/* 하랑 로고 마크 */}
         <div className="harang-logo">
-          <img src={하랑Image} alt="하랑" className="harang-logo-image" />
+          <img src="/GOLDEN-TICKET/harang.png" alt="하랑" className="harang-logo-image" />
           <div className="harang-chocolate-text">하랑</div>
         </div>
 
@@ -179,7 +178,7 @@ function App() {
                 animationDelay: `${sparkle.delay}s`,
               }}
             />
-          ))}
+          ))} 
         </div>
 
 
