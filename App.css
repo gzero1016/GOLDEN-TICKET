@@ -280,7 +280,7 @@
   height: auto;
   min-height: 300px;
   /* aspect-ratio: 4.2 / 1; */
-  background: linear-gradient(135deg, #c9a961 0%, #d4af37 20%, #f4d03f 50%, #d4af37 80%, #c9a961 100%);
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5a3 15%, #d4af37 30%, #c9a961 45%, #b8860b 50%, #c9a961 55%, #d4af37 70%, #e8d5a3 85%, #f5e6d3 100%) !important;
   padding: clamp(25px, 4vw, 40px) clamp(35px, 6vw, 60px) clamp(20px, 3vw, 30px);
   box-shadow: 
     0 0 60px rgba(212, 175, 55, 0.4),
@@ -297,15 +297,8 @@
   z-index: 10;
   transform: translate(-50%, -50%) scale(0.3);
   filter: blur(15px);
-  /* 프리미엄 골드 텍스처 - 세련된 대각선 줄무늬와 광택 효과 */
+  /* 프리미엄 골드 텍스처 - 광택 효과 (줄무늬 제거) */
   background-image: 
-    repeating-linear-gradient(
-      45deg,
-      rgba(201, 169, 97, 0.4) 0px,
-      rgba(201, 169, 97, 0.4) 15px,
-      rgba(212, 175, 55, 0.5) 15px,
-      rgba(212, 175, 55, 0.5) 30px
-    ),
     radial-gradient(
       ellipse 80% 60% at 20% 20%,
       rgba(255, 255, 255, 0.2) 0%,
@@ -669,7 +662,7 @@
   display: flex;
   align-items: flex-start;
   gap: clamp(15px, 3vw, 25px);
-  margin-bottom: clamp(15px, 2.5vw, 20px);
+  margin-bottom: clamp(20px, 3vw, 28px);
   position: relative;
   padding-top: 0;
 }
@@ -721,15 +714,14 @@
 
 .ticket-brand {
   font-size: clamp(2.5rem, 4.5vw, 3.2rem);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: clamp(2px, 0.5vw, 3px);
-  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-weight: 900;
+  color: #4E342E;
+  letter-spacing: clamp(3px, 0.8vw, 5px);
+  font-family: 'Playfair Display', 'Cinzel', serif;
   text-align: left;
   position: relative;
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.6),
-    0 0 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-style: italic;
   /* padding-left: clamp(90px, 14vw, 110px); */
 }
 
@@ -799,39 +791,36 @@
 .ticket-message {
   margin: clamp(20px, 3vw, 30px) 0;
   text-align: center;
-  padding: clamp(15px, 2.5vw, 20px) 0;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: clamp(20px, 3vw, 30px) clamp(15px, 2.5vw, 25px);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
   box-shadow: 
-    inset 0 2px 10px rgba(255, 255, 255, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+    inset 0 2px 15px rgba(255, 255, 255, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 0 30px rgba(212, 175, 55, 0.1);
 }
 
 .message-title {
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: clamp(12px, 2vw, 16px);
-  letter-spacing: clamp(1px, 0.3vw, 2px);
-  text-shadow: 
-    2px 2px 4px rgba(0, 0, 0, 0.7),
-    0 0 15px rgba(0, 0, 0, 0.4),
-    0 0 25px rgba(212, 175, 55, 0.3);
-  font-family: 'Arial', 'Helvetica', sans-serif;
-  line-height: 1.3;
+  font-size: clamp(1.1rem, 2.7vw, 1.5rem);
+  font-weight: 900;
+  color: #4E342E;
+  margin-bottom: clamp(16px, 2.5vw, 20px);
+  letter-spacing: clamp(2px, 0.5vw, 3px);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Playfair Display', 'Cinzel', serif;
+  line-height: 1.4;
+  font-style: italic;
 }
 
 .message-content {
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-  font-weight: 500;
-  color: #fff;
-  line-height: 1.7;
-  text-shadow: 
-    1px 1px 3px rgba(0, 0, 0, 0.6),
-    0 0 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Arial', 'Helvetica', sans-serif;
-  letter-spacing: clamp(0.3px, 0.1vw, 0.5px);
+  font-size: clamp(0.95rem, 1.9vw, 1.65rem);
+  font-weight: 600;
+  color: #4E342E;
+  line-height: 1.8;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-family: 'Playfair Display', 'Cinzel', serif;
+  letter-spacing: clamp(0.5px, 0.15vw, 0.8px);
 }
 
 .ticket-divider::before {
@@ -852,7 +841,7 @@
 /* 티켓 밖 정보 영역 */
 .ticket-info-below {
   position: absolute;
-  top: calc(50% + 160px);
+  top: calc(50% + 150px);
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
@@ -860,8 +849,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: clamp(15px, 3vw, 25px);
-  margin-top: clamp(0px, 0.5vw, 5px);
+  gap: 25px;
+  margin-top: 5px;
   opacity: 0;
   animation: info-fade-in 1s ease-out 2s forwards;
   z-index: 5;
@@ -907,6 +896,64 @@
     1px 1px 3px rgba(0, 0, 0, 0.8),
     0 0 8px rgba(0, 0, 0, 0.5);
   margin-top: clamp(5px, 0.8vw, 8px);
+}
+
+/* 계좌번호 정보 영역 */
+.ticket-account-info {
+  position: absolute;
+  top: calc(50% + 240px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(30px, 5vw, 50px);
+  margin-top: clamp(15px, 2vw, 25px);
+  opacity: 0;
+  animation: info-fade-in 1s ease-out 2.3s forwards;
+  z-index: 5;
+}
+
+.account-item {
+  text-align: center;
+  flex: 0 1 auto;
+}
+
+.account-label {
+  font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+  font-weight: 700;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: clamp(1.5px, 0.4vw, 2px);
+  margin-bottom: clamp(5px, 0.8vw, 8px);
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.account-value {
+  font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.4;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.5);
+  margin: clamp(3px, 0.5vw, 5px) 0;
+  letter-spacing: 0.5px;
+}
+
+.account-name {
+  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.5);
+  margin-top: clamp(2px, 0.4vw, 4px);
 }
 
 .ticket-bottom-text {
@@ -975,7 +1022,97 @@
   }
 }
 
-/* 반응형 디자인 */
+/* PC 버전 (1025px 이상) */
+@media (min-width: 1025px) {
+  .golden-ticket {
+    max-width: 900px !important;
+    width: 900px !important;
+    min-height: 300px !important;
+    padding: 40px 80px 30px !important;
+  }
+
+  .ticket-info-below {
+    top: calc(50% + 170px) !important;
+    max-width: 900px !important;
+    width: 900px !important;
+    gap: 30px !important;
+    margin-top: 10px !important;
+  }
+
+  .ticket-header {
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .ticket-header-content {
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .ticket-brand {
+    font-size: 3.2rem !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .message-title {
+    font-size: 1.4rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .message-content {
+    font-size: 1.4rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .ticket-message {
+    margin: 20px 0 !important;
+    padding: 12px 0 !important;
+  }
+
+  .ticket-divider {
+    margin: 30px 0 !important;
+  }
+
+  .info-label {
+    font-size: 0.75rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .info-value {
+    font-size: 0.9rem !important;
+  }
+
+  .ticket-account-info {
+    top: calc(50% + 280px) !important;
+    max-width: 900px !important;
+    width: 900px !important;
+    gap: 50px !important;
+  }
+}
+
+/* 태블릿 반응형 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .golden-ticket {
+    max-width: 85%;
+    padding: clamp(20px, 3vw, 35px) clamp(30px, 5vw, 50px);
+  }
+
+  .ticket-info-below {
+    top: calc(50% + clamp(150px, 20vh, 220px));
+    max-width: 85%;
+  }
+
+  .message-content {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+  }
+
+  .ticket-brand {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+  }
+}
+
+/* 모바일 반응형 */
 @media (max-width: 768px) {
   .app-container {
     padding: 15px;
@@ -1070,8 +1207,8 @@
   }
 
   .ticket-message {
-    margin: clamp(12px, 2vw, 18px) 0;
-    padding: clamp(12px, 2vw, 18px) 0;
+    margin: clamp(10px, 1.5vw, 15px) 0;
+    padding: clamp(8px, 1.5vw, 12px) 0;
   }
 
   .message-title {
@@ -1080,7 +1217,7 @@
   }
 
   .message-content {
-    font-size: clamp(0.8rem, 1.7vw, 1rem);
+    font-size: clamp(0.75rem, 1.6vw, 0.95rem);
     line-height: 1.5;
   }
 
@@ -1097,7 +1234,7 @@
 
   .ticket-info-below {
     position: absolute;
-    top: calc(40% + 28vh);
+    top: calc(40% + 25vh);
     left: 50%;
     transform: translateX(-50%);
     flex-direction: column;
@@ -1121,5 +1258,31 @@
   .info-value {
     font-size: 0.75rem;
     line-height: 1.4;
+  }
+
+  .ticket-account-info {
+    top: calc(40% + 35vh);
+    flex-direction: column;
+    gap: clamp(15px, 3vw, 25px);
+    margin-top: clamp(10px, 2vw, 15px);
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .account-item {
+    width: 100%;
+  }
+
+  .account-label {
+    font-size: 0.65rem;
+    margin-bottom: 6px;
+  }
+
+  .account-value {
+    font-size: 0.75rem;
+  }
+
+  .account-name {
+    font-size: 0.7rem;
   }
 }
