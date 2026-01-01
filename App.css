@@ -11,18 +11,768 @@
   overflow-x: hidden;
 }
 
-/* 초콜릿 바 스타일 */
-.chocolate-bar {
-  cursor: pointer;
-  position: relative;
+/* 고급스러운 초콜릿 포장지 래퍼 */
+.chocolate-wrapper {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100%;
+  max-width: 520px;
+  height: 300px;
   z-index: 1;
   animation: chocolate-appear 0.5s ease-out;
+  perspective: 1000px;
+  margin: 0;
+}
+
+.chocolate-wrapper.opened {
+  pointer-events: none;
+}
+
+/* 절취선 */
+.tear-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  z-index: 10;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.chocolate-wrapper.opened .tear-line {
+  cursor: default;
+  pointer-events: none;
+}
+
+.chocolate-wrapper.dragging .tear-line {
+  cursor: grabbing;
+}
+
+.tear-line-indicator {
+  position: relative;
   width: 100%;
-  max-width: 500px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tear-line-dots {
+  width: 90%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(212, 175, 55, 0.8) 0px,
+    rgba(212, 175, 55, 0.8) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  position: relative;
+  transition: opacity 0.3s ease;
+}
+
+.chocolate-wrapper.opened .tear-line-dots {
+  opacity: 0;
+}
+
+.drag-hint {
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(212, 175, 55, 0.9);
+  font-size: clamp(10px, 1.5vw, 14px);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  animation: drag-hint-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.chocolate-wrapper.opened .drag-hint,
+.chocolate-wrapper.dragging .drag-hint {
+  opacity: 0;
+}
+
+@keyframes drag-hint-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(3px);
+  }
+}
+
+/* 좌측 톱니바퀴 절취선 */
+.tear-line-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 100%;
+  z-index: 10;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  background: linear-gradient(
+    180deg,
+    #1a4d7a 0%,
+    #2563a5 15%,
+    #2d7bc4 30%,
+    #2563a5 45%,
+    #1a4d7a 60%,
+    #0f3a5c 100%
+  );
+  border-radius: 12px 0 0 12px;
+  transform-origin: left center;
+  transform: translateX(calc(var(--drag-progress, 0) * -100%)) 
+             rotateY(calc(var(--drag-progress, 0) * -20deg));
+  transition: transform 0.1s ease-out;
+  overflow: visible;
+}
+
+.gear-teeth-left {
+  position: absolute;
+  left: -20px;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  clip-path: polygon(
+    0 0,
+    0 8%,
+    3px 0,
+    0 16%,
+    3px 8%,
+    0 24%,
+    3px 16%,
+    0 32%,
+    3px 24%,
+    0 40%,
+    3px 32%,
+    0 48%,
+    3px 40%,
+    0 56%,
+    3px 48%,
+    0 64%,
+    3px 56%,
+    0 72%,
+    3px 64%,
+    0 80%,
+    3px 72%,
+    0 88%,
+    3px 80%,
+    0 96%,
+    3px 88%,
+    0 100%,
+    20px 100%,
+    20px 0
+  );
+  z-index: 25;
+  pointer-events: none;
+}
+
+.tear-line-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.1) 70%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  border-radius: 12px 0 0 12px;
+  pointer-events: none;
+}
+
+.tear-line-left::after {
+  display: none;
+}
+
+.chocolate-wrapper.opened .tear-line-left,
+.tear-line-left.torn {
+  cursor: default;
+  pointer-events: none;
+  transform: translateX(-120%) rotateY(-35deg) rotateZ(-3deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chocolate-wrapper.dragging .tear-line-left {
+  cursor: grabbing;
+}
+
+.tear-line-gear {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gear-teeth {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 4px !important;
+  height: 100% !important;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.8) 0px,
+    rgba(255, 255, 255, 0.8) 5px,
+    transparent 5px,
+    transparent 10px
+  ) !important;
+  transition: opacity 0.3s ease;
+  z-index: 20 !important;
+  box-shadow: 
+    2px 0 4px rgba(255, 255, 255, 0.6),
+    -2px 0 4px rgba(255, 255, 255, 0.6) !important;
+  pointer-events: none;
+}
+
+.gear-teeth::before {
+  content: '' !important;
+  position: absolute !important;
+  right: -6px !important;
+  top: 0 !important;
+  width: 12px !important;
+  height: 100% !important;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.7) 0px,
+    rgba(255, 255, 255, 0.7) 7px,
+    transparent 7px,
+    transparent 14px
+  ) !important;
+  clip-path: polygon(
+    0 0,
+    2px -4px,
+    4px 0,
+    6px -4px,
+    8px 0,
+    10px -3px,
+    12px 0,
+    12px 100%,
+    10px 104%,
+    8px 100%,
+    6px 104%,
+    4px 100%,
+    2px 104%,
+    0 100%
+  ) !important;
+  z-index: 21 !important;
+  pointer-events: none;
+}
+
+.gear-teeth-svg {
+  pointer-events: none;
+}
+
+.chocolate-wrapper.opened .gear-teeth {
+  opacity: 0;
+}
+
+.drag-hint-top {
+  position: absolute;
+  top: -40px;
+  left: 50px;
+  transform: translateX(-50%);
+  color: rgba(212, 175, 55, 0.95);
+  font-size: clamp(11px, 1.6vw, 15px);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  animation: drag-hint-pulse-top 2s ease-in-out infinite;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  z-index: 30;
+}
+
+.chocolate-wrapper.opened .drag-hint-top,
+.chocolate-wrapper.dragging .drag-hint-top {
+  opacity: 0;
+}
+
+@keyframes drag-hint-pulse-top {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(3px);
+  }
+}
+
+.drag-hint-left {
+  position: absolute;
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(10px, 1.5vw, 14px);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  animation: drag-hint-pulse-left 2s ease-in-out infinite;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  z-index: 30;
+  display: none;
+}
+
+.chocolate-wrapper.opened .drag-hint-left,
+.chocolate-wrapper.dragging .drag-hint-left {
+  opacity: 0;
+}
+
+@keyframes drag-hint-pulse-left {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-5px);
+  }
+}
+
+/* 하랑 로고 */
+.harang-logo {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+.harang-logo-image {
+  width: clamp(100px, 18vw, 150px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+}
+
+.harang-chocolate-text {
+  margin-top: 16px;
+  position: relative;
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.98);
+  font-size: clamp(18px, 3.2vw, 26px);
+  font-weight: 300;
+  text-align: center;
+  letter-spacing: 8px;
+  font-family: 'Playfair Display', 'Cinzel', 'Georgia', serif;
+  text-transform: none;
+  text-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(255, 255, 255, 0.15),
+    0 0 50px rgba(45, 123, 196, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.harang-chocolate-text::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent);
+  transition: width 0.6s ease;
+}
+
+.harang-chocolate-text:hover::before {
+  width: 80%;
+}
+
+.harang-chocolate-text::after {
+  content: '하랑';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.05);
+  text-shadow: 
+    2px 2px 0 rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(45, 123, 196, 0.1);
+  z-index: -1;
+  letter-spacing: 8px;
+}
+
+.hts-logo-circle {
+  width: clamp(80px, 15vw, 120px);
+  height: clamp(80px, 15vw, 120px);
+  border-radius: 50%;
+  background: white;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.hts-logo-text {
+  position: absolute;
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 900;
+  color: #0066cc;
+  letter-spacing: -2px;
+  z-index: 2;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+.hts-logo-silhouette {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 30px;
+  height: 30px;
+  background: #0066cc;
+  clip-path: polygon(
+    50% 0%,
+    60% 20%,
+    80% 15%,
+    70% 35%,
+    90% 40%,
+    70% 50%,
+    80% 70%,
+    60% 65%,
+    50% 85%,
+    40% 65%,
+    20% 70%,
+    30% 50%,
+    10% 40%,
+    30% 35%,
+    20% 15%,
+    40% 20%
+  );
+  z-index: 3;
+}
+
+.hts-logo-hq {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(8px, 1.5vw, 12px);
+  font-weight: 700;
+  color: #0066cc;
+  z-index: 2;
+}
+
+.hts-logo-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border: 2px solid #0066cc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(6px, 1.2vw, 9px);
+  font-weight: 700;
+  color: #0066cc;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.hts-logo-ring::before {
+  content: 'HIGHER THAN SKY';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.hts-logo-triangles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: 110%;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.hts-logo-triangles::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    #0066cc 0deg 8deg,
+    transparent 8deg 16deg
+  );
+  border-radius: 50%;
+  clip-path: polygon(
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%,
+    50% 0%, 52% 2%, 50% 4%, 48% 2%
+  );
+}
+
+/* 포장지 본체 찢어지는 효과 */
+.wrapper-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  overflow: visible;
+  z-index: 2;
+}
+
+.wrapper-body-left,
+.wrapper-body-right {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    #1a4d7a 0%,
+    #2563a5 15%,
+    #2d7bc4 30%,
+    #2563a5 45%,
+    #1a4d7a 60%,
+    #0f3a5c 100%
+  );
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(0, 0, 0, 0.4),
+    inset 0 3px 8px rgba(255, 255, 255, 0.05),
+    0 0 30px rgba(0, 102, 204, 0.2);
+  transition: transform 0.1s ease-out;
+}
+
+.wrapper-body-left-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  transform-origin: left center;
+  transform: translateX(calc(var(--drag-progress, 0) * -100%)) 
+             rotateY(calc(var(--drag-progress, 0) * -20deg));
+  transition: transform 0.1s ease-out;
+  z-index: 3;
+}
+
+.wrapper-body.torn .wrapper-body-left-wrapper {
+  transform: translateX(-120%) rotateY(-35deg) rotateZ(-3deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wrapper-body-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    #1a4d7a 0%,
+    #2563a5 15%,
+    #2d7bc4 30%,
+    #2563a5 45%,
+    #1a4d7a 60%,
+    #0f3a5c 100%
+  );
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(0, 0, 0, 0.4),
+    inset 0 3px 8px rgba(255, 255, 255, 0.05),
+    0 0 30px rgba(0, 102, 204, 0.2);
+  border-radius: 12px 0 0 12px;
+  overflow: visible !important;
+}
+
+.wrapper-body-right {
+  left: 50px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 0 12px 12px 0;
+  transform-origin: left center;
+}
+
+
+.wrapper-body.torn .wrapper-body-right {
+  transform: translateX(10%) rotateY(8deg) rotateZ(2deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wrapper-body-left::before,
+.wrapper-body-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      ellipse at 30% 40%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 60%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    );
+}
+
+.wrapper-body-left::before {
+  border-radius: 12px 0 0 12px;
+}
+
+.wrapper-body-right::before {
+  border-radius: 0 12px 12px 0;
+}
+
+.wrapper-body-left::after,
+.wrapper-body-right::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.3) 20%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.3) 80%,
+    transparent
+  );
+}
+
+.wrapper-body-left::after {
+  right: 0;
+}
+
+.wrapper-body-right::after {
+  left: 0;
+}
+
+/* 포장지 본체 - 기존 스타일 제거됨, 찢어지는 효과로 대체 */
+
+.wrapper-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      ellipse at 30% 40%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 60%,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%
+    );
+  border-radius: 12px;
+}
+
+.wrapper-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.15) 60%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+  border-radius: 0 0 12px 12px;
+}
+
+/* 초콜릿 바 스타일 */
+.chocolate-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 450px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  z-index: 3;
 }
 
 @keyframes chocolate-appear {
@@ -36,8 +786,8 @@
   }
 }
 
-.chocolate-bar:hover {
-  transform: scale(1.02);
+.chocolate-wrapper:not(.opened):not(.dragging) .chocolate-bar:hover {
+  transform: translate(-50%, -50%) scale(1.02);
 }
 
 /* 모바일용 초콜릿 바 애니메이션 */
@@ -52,7 +802,33 @@
   }
 }
 
-.chocolate-bar.broken {
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .chocolate-wrapper {
+    max-width: 95%;
+    height: 220px;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    animation: chocolate-appear-mobile 0.5s ease-out;
+    margin: 0 !important;
+  }
+
+  .chocolate-wrapper.dragging {
+    transform: translate(-50%, calc(-50% + calc(var(--drag-progress, 0) * -30px))) !important;
+  }
+
+  .chocolate-bar {
+    max-width: 100%;
+  }
+
+  .drag-hint {
+    font-size: clamp(9px, 2vw, 12px);
+  }
+}
+
+.chocolate-wrapper.opened .chocolate-bar {
   pointer-events: none;
 }
 
@@ -1121,21 +1897,12 @@
     padding-top: 0;
   }
 
-  .chocolate-bar {
+  .chocolate-wrapper {
     max-width: 90%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: chocolate-appear-mobile 0.5s ease-out;
   }
 
-  .chocolate-bar:hover {
-    transform: translate(-50%, -50%) scale(1.02);
-  }
-
-  .chocolate-bar.broken {
-    transform: translate(-50%, -50%);
+  .chocolate-bar {
+    max-width: 100%;
   }
 
   .chocolate-grid {
@@ -1145,14 +1912,14 @@
   .golden-ticket {
     max-width: 95%;
     width: 95%;
-    padding: clamp(15px, 3vw, 20px) clamp(15px, 3vw, 20px);
+    padding: clamp(12px, 2.5vw, 16px) clamp(12px, 2.5vw, 18px);
     min-height: auto;
     position: absolute;
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.3);
     margin: 0;
-    max-height: 60vh;
+    max-height: 50vh;
     overflow-y: auto;
   }
 
@@ -1207,8 +1974,20 @@
   }
 
   .ticket-message {
-    margin: clamp(10px, 1.5vw, 15px) 0;
-    padding: clamp(8px, 1.5vw, 12px) 0;
+    margin: clamp(8px, 1.2vw, 12px) 0;
+    padding: clamp(6px, 1.2vw, 10px) clamp(10px, 2vw, 15px);
+  }
+
+  .ticket-header {
+    margin-bottom: clamp(12px, 2vw, 18px);
+  }
+
+  .ticket-divider {
+    margin: clamp(12px, 2vw, 18px) 0;
+  }
+
+  .wrapper-body {
+    min-height: 220px;
   }
 
   .message-title {

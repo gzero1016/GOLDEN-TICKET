@@ -1,18 +1,102 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import './App.css';
+import 하랑Image from './하랑.png';
 
 function App() {
   const [isOpened, setIsOpened] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [sparkles, setSparkles] = useState([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragProgress, setDragProgress] = useState(0);
+  const wrapperRef = useRef(null);
+  const startYRef = useRef(0);
 
-  const handleOpenEnvelope = () => {
+  const handleDragStart = (clientY) => {
+    if (isOpened) return;
+    setIsDragging(true);
+    startYRef.current = clientY; // Y 좌표로 변경
+  };
+
+  const handleDragMove = useCallback((clientY) => {
+    if (!isDragging || isOpened) return;
+    
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    
+    const rect = wrapper.getBoundingClientRect();
+    const startY = startYRef.current;
+    const currentY = clientY;
+    const dragDistance = currentY - startY; // 아래로 드래그하면 양수
+    const maxDrag = rect.height * 0.4; // 최대 드래그 거리
+    const progress = Math.min(Math.max(dragDistance / maxDrag, 0), 1);
+    
+    setDragProgress(progress);
+    
+    // 80% 이상 드래그하면 자동으로 열림
+    if (progress >= 0.8) {
+      handleOpen();
+    }
+  }, [isDragging, isOpened]);
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging || isOpened) return;
+    
+    setDragProgress(prev => {
+      // 50% 이상 드래그했으면 열림, 아니면 원래대로
+      if (prev >= 0.5) {
+        handleOpen();
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    setIsDragging(false);
+  }, [isDragging, isOpened]);
+
+  const handleOpen = useCallback(() => {
     if (!isOpened) {
       setIsOpened(true);
+      setDragProgress(1);
       setTimeout(() => {
         setIsVisible(true);
       }, 1100);
     }
+  }, [isOpened]);
+
+  // 마우스 이벤트
+  useEffect(() => {
+    if (!isDragging || isOpened) return;
+
+    const handleMouseMove = (e) => {
+      handleDragMove(e.clientY);
+    };
+    const handleMouseUp = () => {
+      handleDragEnd();
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, isOpened, handleDragMove, handleDragEnd]);
+
+  // 터치 이벤트
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    handleDragStart(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    handleDragMove(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    handleDragEnd();
   };
 
   useEffect(() => {
@@ -34,47 +118,55 @@ function App() {
     }
   }, [isOpened]);
 
-  // 3행 6열 = 18개 조각 생성
-  const chocolatePieces = Array.from({ length: 18 }, (_, i) => ({
-    id: i,
-    row: Math.floor(i / 6),
-    col: i % 6,
-    breakX: (Math.random() - 0.5) * 2,
-    breakY: (Math.random() - 0.5) * 2,
-    breakRotate: (Math.random() - 0.5) * 720,
-  }));
 
   return (
     <div className="app-container">
       <div 
-        className={`chocolate-bar ${isOpened ? 'broken' : ''}`} 
-        onClick={handleOpenEnvelope}
+        ref={wrapperRef}
+        className={`chocolate-wrapper ${isOpened ? 'opened' : ''} ${isDragging ? 'dragging' : ''}`}
+        style={{
+          '--drag-progress': dragProgress,
+        }}
       >
-        <div className="chocolate-grid">
-          {chocolatePieces.map((piece) => (
-            <div
-              key={piece.id}
-              className={`chocolate-piece piece-${piece.id} ${isOpened ? 'broken' : ''}`}
-              style={{
-                gridRow: piece.row + 1,
-                gridColumn: piece.col + 1,
-                '--break-x': piece.breakX,
-                '--break-y': piece.breakY,
-                '--break-rotate': `${piece.breakRotate}deg`,
-                animationDelay: `${piece.id * 0.02}s`,
-              }}
-            />
-          ))}
+        {/* 좌측 톱니바퀴 절취선 */}
+        <div 
+          className={`tear-line-left ${isOpened ? 'torn' : ''}`}
+          style={{
+            '--drag-progress': dragProgress,
+          }}
+          onMouseDown={(e) => handleDragStart(e.clientY)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="tear-line-gear">
+            {!isOpened && <div className="drag-hint-left">↓ 드래그하여 열기</div>}
+          </div>
         </div>
-        {!isOpened && <div className="click-hint">클릭</div>}
+        
+        {/* 절취선 위 드래그 힌트 */}
+        {!isOpened && <div className="drag-hint-top">↓ 드래그하여 열기</div>}
+
+        {/* 하랑 로고 마크 */}
+        <div className="harang-logo">
+          <img src={하랑Image} alt="하랑" className="harang-logo-image" />
+          <div className="harang-chocolate-text">하랑</div>
+        </div>
+
+        {/* 포장지 본체 (찢어지는 효과) */}
+        <div className={`wrapper-body ${isOpened ? 'torn' : ''}`}>
+          <div className="wrapper-body-left-wrapper" style={{ '--drag-progress': dragProgress }}>
+            <div className="wrapper-body-left">
+              <div className="gear-teeth"></div>
+            </div>
+          </div>
+          <div className="wrapper-body-right"></div>
+        </div>
       </div>
       {/* 초콜릿 가운데에서 나오는 황금빛 */}
       {isOpened && <div className="chocolate-golden-glow"></div>}
       {isOpened && (
         <div className={`golden-ticket ${isVisible ? 'visible' : ''}`}>
-        {/* 톱니 모양 가장자리 (좌우만) */}
-        <div className="ticket-perforation left"></div>
-        <div className="ticket-perforation right"></div>
         {/* 배경 반짝임 효과 */}
         <div className="sparkle-container">
           {sparkles.map(sparkle => (
