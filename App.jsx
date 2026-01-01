@@ -112,8 +112,8 @@ function App() {
             <div className="message-content">
               "얘네 진짜 하나?" 하셨던 분들, 진짜 합니다!<br />
               두 친구가 만든 공간에서 정성껏 고사를 지내려 합니다.<br />
-              고사상 돼지 입 찢어지게 기(氣) 넣어주실 귀빈 여러분을 모십니다. 오셔서 좋은 기운도 나눠 가지시고,  <br />
-              저희의 앞날도 축복해주세요!
+              돼지 입 찢어지게 기(氣) 넣어주실 귀빈 여러분을 모십니다. 
+              {/* 오셔서 좋은 기운도 나눠 가지시고, 저희의 앞날도 축복해주세요! */}
             </div>
           </div>
           {/* <div className="ticket-bottom-text">THIS GOLDEN TICKET ENSURES ADMITTANCE</div> */}
