@@ -66,7 +66,7 @@ function App() {
             />
           ))}
         </div>
-        {!isOpened && <div className="click-hint">클릭하여 열기</div>}
+        {!isOpened && <div className="click-hint">클릭</div>}
       </div>
       {/* 초콜릿 가운데에서 나오는 황금빛 */}
       {isOpened && <div className="chocolate-golden-glow"></div>}
@@ -100,24 +100,20 @@ function App() {
               <div className="stamp-day">11</div>
             </div>
             <div className="ticket-header-content">
-              <div className="ticket-brand">개관식 초대장</div>
+              <div className="ticket-brand">초대장</div>
             </div>
           </div>
-          <h1 className="ticket-title">GOLDEN TICKET</h1>
+          {/* <h1 className="ticket-title">GOLDEN TICKET</h1> */}
 
           <div className="ticket-divider"></div>
-          <div className="ticket-footer">
-            <div className="footer-left">
-              <div className="footer-label">PLACE</div>
-              <div className="footer-value">하랑 음악줄넘기 율하점</div>
-            </div>
-            <div className="footer-center">
-              <div className="footer-label">DATE</div>
-              <div className="footer-value">2026.01.11</div>
-            </div>
-            <div className="footer-right">
-            <div className="footer-label">Address</div>
-            <div className="footer-value">경남 김해시 율하2로115번길 11</div>
+          
+          <div className="ticket-message">
+            <div className="message-title">드디어 사고 쳤습니다!</div>
+            <div className="message-content">
+              "얘네 진짜 하나?" 하셨던 분들, 진짜 합니다!<br />
+              두 친구가 의기투합해 만든 공간에서 정성껏 고사를 지내려 합니다.<br />
+              고사상 돼지 입 찢어지게 기(氣) 넣어주실 귀빈 여러분을 모십니다. <br />
+              오셔서 좋은 기운도 나눠 가지시고, 저희의 앞날도 축복해주세요!
             </div>
           </div>
           {/* <div className="ticket-bottom-text">THIS GOLDEN TICKET ENSURES ADMITTANCE</div> */}
@@ -127,6 +123,24 @@ function App() {
         <div className="ticket-border"></div>
         <div className="ticket-glow"></div>
       </div>
+      )}
+      
+      {/* 티켓 밖 정보 */}
+      {isOpened && isVisible && (
+        <div className="ticket-info-below">
+          <div className="info-item">
+            <div className="info-label">PLACE</div>
+            <div className="info-value">하랑 음악줄넘기 율하점</div>
+          </div>
+          <div className="info-item">
+            <div className="info-label">DATE</div>
+            <div className="info-value">2026.01.11 (일) PM 19:00</div>
+          </div>
+          <div className="info-item">
+            <div className="info-label">ADDRESS</div>
+            <div className="info-value">경남 김해시 율하2로115번길 11<br />현대프라자 2층</div>
+          </div>
+        </div>
       )}
     </div>
   );
