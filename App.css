@@ -669,31 +669,7 @@
 
 .wrapper-body-left::before,
 .wrapper-body-right::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(
-      ellipse at 30% 40%,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 70% 60%,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 50%
-    );
-}
-
-.wrapper-body-left::before {
-  border-radius: 12px 0 0 12px;
-}
-
-.wrapper-body-right::before {
-  border-radius: 0 12px 12px 0;
+  display: none;
 }
 
 .wrapper-body-left::after,
@@ -724,41 +700,11 @@
 /* 포장지 본체 - 기존 스타일 제거됨, 찢어지는 효과로 대체 */
 
 .wrapper-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(
-      ellipse at 30% 40%,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      ellipse at 70% 60%,
-      rgba(255, 255, 255, 0.08) 0%,
-      transparent 50%
-    );
-  border-radius: 12px;
+  display: none;
 }
 
 .wrapper-body::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.03) 0%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.15) 60%,
-    rgba(0, 0, 0, 0.25) 100%
-  );
-  border-radius: 0 0 12px 12px;
+  display: none;
 }
 
 /* 초콜릿 바 스타일 */
@@ -1568,13 +1514,10 @@
   margin: clamp(20px, 3vw, 30px) 0;
   text-align: center;
   padding: clamp(20px, 3vw, 30px) clamp(15px, 2.5vw, 25px);
-  background: rgba(255, 255, 255, 0.12);
+  background: transparent !important;
   border-radius: 8px;
-  border: 2px solid rgba(212, 175, 55, 0.3);
-  box-shadow: 
-    inset 0 2px 15px rgba(255, 255, 255, 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 0 30px rgba(212, 175, 55, 0.1);
+  border: none;
+  box-shadow: none;
 }
 
 .message-title {
