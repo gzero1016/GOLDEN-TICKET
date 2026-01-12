@@ -1790,12 +1790,12 @@
 }
 
 /* PC 버전 (1025px 이상) */
-@media (min-width: 1025px) {
+@media (min-width: 800px) {
   .golden-ticket {
-    max-width: 900px !important;
-    width: 900px !important;
-    min-height: 300px !important;
-    padding: 40px 80px 30px !important;
+    max-width: 750px !important;
+    width: 750px !important;
+    min-height: 250px !important;
+    padding: 30px 30px 0px !important;
   }
 
   .ticket-info-below {
@@ -1817,28 +1817,28 @@
   }
 
   .ticket-brand {
-    font-size: 3.2rem !important;
+    font-size: 2.2rem !important;
     text-align: center !important;
     width: 100% !important;
   }
 
   .message-title {
-    font-size: 1.4rem !important;
+    font-size: 1rem !important;
     margin-bottom: 16px !important;
   }
 
   .message-content {
-    font-size: 1.4rem !important;
+    font-size: 1rem !important;
     line-height: 1.7 !important;
   }
 
   .ticket-message {
-    margin: 20px 0 !important;
-    padding: 12px 0 !important;
+    margin: 10px 0 !important;
+    padding: 6px 0 !important;
   }
 
   .ticket-divider {
-    margin: 30px 0 !important;
+    margin: 10px 0 !important;
   }
 
   .info-label {
@@ -1866,7 +1866,7 @@
   }
 
   .ticket-info-below {
-    top: calc(50% + clamp(150px, 20vh, 220px));
+    bottom: 10px;
     max-width: 85%;
   }
 
@@ -1911,7 +1911,8 @@
     transform: translate(-50%, -50%) scale(0.3);
     margin: 0;
     max-height: 50vh;
-    overflow-y: auto;
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
 
   .golden-ticket.visible {
