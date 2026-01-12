@@ -4,11 +4,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  background: #000000;
   padding: 20px;
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.app-container::before {
+  display: none;
 }
 
 /* 고급스러운 초콜릿 포장지 래퍼 */
@@ -130,12 +134,12 @@
   -webkit-user-select: none;
   background: linear-gradient(
     180deg,
-    #1a4d7a 0%,
-    #2563a5 15%,
-    #2d7bc4 30%,
-    #2563a5 45%,
-    #1a4d7a 60%,
-    #0f3a5c 100%
+    #1e293b 0%,
+    #334155 15%,
+    #475569 30%,
+    #334155 45%,
+    #1e293b 60%,
+    #0f172a 100%
   );
   border-radius: 12px 0 0 12px;
   transform-origin: left center;
@@ -143,6 +147,12 @@
              rotateY(calc(var(--drag-progress, 0) * -20deg));
   transition: transform 0.1s ease-out;
   overflow: visible;
+  box-shadow: 
+    0 0 20px rgba(30, 41, 59, 0.4),
+    0 0 40px rgba(51, 65, 85, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.05),
+    inset 0 0 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .gear-teeth-left {
@@ -297,15 +307,18 @@
   top: -40px;
   left: 50px;
   transform: translateX(-50%);
-  color: rgba(212, 175, 55, 0.95);
+  color: rgba(203, 213, 225, 0.9);
   font-size: clamp(11px, 1.6vw, 15px);
   font-weight: 600;
   text-align: center;
   white-space: nowrap;
   animation: drag-hint-pulse-top 2s ease-in-out infinite;
   pointer-events: none;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  text-shadow: 
+    0 0 8px rgba(203, 213, 225, 0.5),
+    0 0 15px rgba(148, 163, 184, 0.3);
   z-index: 30;
+  letter-spacing: 1px;
 }
 
 .chocolate-wrapper.opened .drag-hint-top,
@@ -329,16 +342,19 @@
   left: 60px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(203, 213, 225, 0.9);
   font-size: clamp(10px, 1.5vw, 14px);
   font-weight: 600;
   text-align: center;
   white-space: nowrap;
   animation: drag-hint-pulse-left 2s ease-in-out infinite;
   pointer-events: none;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 
+    0 0 8px rgba(203, 213, 225, 0.5),
+    0 0 15px rgba(148, 163, 184, 0.3);
   z-index: 30;
   display: none;
+  letter-spacing: 1px;
 }
 
 .chocolate-wrapper.opened .drag-hint-left,
@@ -361,39 +377,69 @@
 .harang-logo {
   position: absolute;
   top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.harang-text-container {
+  position: absolute;
+  top: 50%;
   right: 10%;
   transform: translateY(-50%);
   z-index: 4;
   pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
 }
 
 .harang-logo-image {
-  width: clamp(100px, 18vw, 150px);
+  width: clamp(160px, 30vw, 250px);
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
 }
 
 .harang-chocolate-text {
-  margin-top: 16px;
+  margin-top: 0;
   position: relative;
-  display: inline-block;
-  color: rgba(255, 255, 255, 0.98);
-  font-size: clamp(18px, 3.2vw, 26px);
-  font-weight: 300;
-  text-align: center;
-  letter-spacing: 8px;
+  display: block;
+  color: #ffffff;
+  font-size: clamp(26px, 4.8vw, 40px);
+  font-weight: 700;
+  text-align: right;
+  letter-spacing: 6px;
   font-family: 'Playfair Display', 'Cinzel', 'Georgia', serif;
   text-transform: none;
   text-shadow: 
-    0 1px 2px rgba(0, 0, 0, 0.3),
-    0 0 30px rgba(255, 255, 255, 0.15),
-    0 0 50px rgba(45, 123, 196, 0.2);
+    0 0 8px rgba(203, 213, 225, 0.4),
+    0 0 15px rgba(148, 163, 184, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.5);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
   padding: 0;
   background: none;
   border: none;
+  line-height: 1.1;
+}
+
+.harang-location {
+  font-size: clamp(12px, 1.8vw, 16px);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  letter-spacing: 2px;
+  font-family: 'Playfair Display', 'Cinzel', 'Georgia', serif;
+  text-shadow: 
+    0 0 6px rgba(203, 213, 225, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  margin-top: 2px;
+  text-align: right;
 }
 
 .harang-chocolate-text::before {
@@ -594,19 +640,20 @@
   height: 100%;
   background: linear-gradient(
     180deg,
-    #1a4d7a 0%,
-    #2563a5 15%,
-    #2d7bc4 30%,
-    #2563a5 45%,
-    #1a4d7a 60%,
-    #0f3a5c 100%
+    #1e293b 0%,
+    #334155 15%,
+    #475569 30%,
+    #334155 45%,
+    #1e293b 60%,
+    #0f172a 100%
   );
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(30, 41, 59, 0.3),
     inset 0 0 40px rgba(0, 0, 0, 0.4),
-    inset 0 3px 8px rgba(255, 255, 255, 0.05),
-    0 0 30px rgba(0, 102, 204, 0.2);
+    inset 0 3px 8px rgba(255, 255, 255, 0.05);
   transition: transform 0.1s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .wrapper-body-left-wrapper {
@@ -636,20 +683,21 @@
   height: 100%;
   background: linear-gradient(
     180deg,
-    #1a4d7a 0%,
-    #2563a5 15%,
-    #2d7bc4 30%,
-    #2563a5 45%,
-    #1a4d7a 60%,
-    #0f3a5c 100%
+    #1e293b 0%,
+    #334155 15%,
+    #475569 30%,
+    #334155 45%,
+    #1e293b 60%,
+    #0f172a 100%
   );
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(30, 41, 59, 0.3),
     inset 0 0 40px rgba(0, 0, 0, 0.4),
-    inset 0 3px 8px rgba(255, 255, 255, 0.05),
-    0 0 30px rgba(0, 102, 204, 0.2);
+    inset 0 3px 8px rgba(255, 255, 255, 0.05);
   border-radius: 12px 0 0 12px;
   overflow: visible !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .wrapper-body-right {

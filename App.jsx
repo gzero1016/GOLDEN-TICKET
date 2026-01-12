@@ -149,7 +149,12 @@ function App() {
         {/* 하랑 로고 마크 */}
         <div className="harang-logo">
           <img src="/GOLDEN-TICKET/harang.png" alt="하랑" className="harang-logo-image" />
+        </div>
+        
+        {/* 하랑 텍스트 */}
+        <div className="harang-text-container">
           <div className="harang-chocolate-text">하랑</div>
+          <div className="harang-location">율하점</div>
         </div>
 
         {/* 포장지 본체 (찢어지는 효과) */}
@@ -188,7 +193,7 @@ function App() {
             <div className="ticket-stamp">
               <div className="stamp-date">2026</div>
               <div className="stamp-month">JAN</div>
-              <div className="stamp-day">11</div>
+              <div className="stamp-day">18</div>
             </div>
             <div className="ticket-header-content">
               <div className="ticket-brand">초대장</div>
@@ -229,7 +234,7 @@ function App() {
           </div>
           <div className="info-item">
             <div className="info-label">DATE</div>
-            <div className="info-value">2026.01.11 (일) PM 17:00 ~ 21:00</div>
+            <div className="info-value">2026.01.18 (일) PM 17:00 ~ 21:00</div>
           </div>
           <div className="info-item">
             <div className="info-label">마음전하기</div>
