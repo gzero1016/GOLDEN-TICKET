@@ -462,7 +462,6 @@
 }
 
 .harang-chocolate-text::after {
-  content: '하랑';
   position: absolute;
   top: 0;
   left: 0;
